@@ -2,11 +2,12 @@
 
 namespace App\DataFixtures;
 
-use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Persistence\ObjectManager;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use App\Entity\User;
+use App\Entity\Student;
+use App\Entity\Teacher;
 use Faker\Factory as Faker;
+use Doctrine\Persistence\ObjectManager;
+use Doctrine\Bundle\FixturesBundle\Fixture;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserFixtures extends Fixture
 {
@@ -33,7 +34,7 @@ class UserFixtures extends Fixture
         $createdAt = $this->createdAt = new \DateTimeImmutable();
         $updatedAt = $this->updatedAt = new \DateTimeImmutable();
 
-        $user = new User();
+        $user = new Teacher();
         $user
             ->setEmail('admin@email.com')
             ->setFirstName($firstname)
@@ -47,6 +48,7 @@ class UserFixtures extends Fixture
         $user->setPassword($hashedPassword);
         
         $manager->persist($user);
+        $hashedPassword = $this->passwordHasher->hashPassword(new Student(), 'password');
 
         for ($i=0; $i < 100; $i++) { 
             $lastname = $faker->lastName();
@@ -54,7 +56,7 @@ class UserFixtures extends Fixture
             $phone = $faker->phoneNumber(); 
             $createdAt = $this->createdAt = new \DateTimeImmutable();
             $updatedAt = $this->updatedAt = new \DateTimeImmutable();
-            $user = new User();
+            $user = new Student();
             $user
                 ->setEmail($faker->email())
                 ->setFirstName($firstname)
@@ -64,7 +66,6 @@ class UserFixtures extends Fixture
                 ->setUpdatedAt($updatedAt)
                 ->setRoles(['ROLE_ELEVE']) 
             ;
-            $hashedPassword = $this->passwordHasher->hashPassword($user, 'password');
             $user->setPassword($hashedPassword);
             $manager->persist($user);
         }

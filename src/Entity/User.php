@@ -10,8 +10,12 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
+#[ORM\InheritanceType('JOINED')]
+#[ORM\DiscriminatorColumn(name: 'discr', type: 'string')]
+#[ORM\DiscriminatorMap(['user' => User::class, 'teacher' => Teacher::class, 'student' => Student::class])]
 
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+
+abstract class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\PrePersist]
     function prePersist()
