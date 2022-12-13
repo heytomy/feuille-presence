@@ -47,8 +47,8 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('createdAt') 
-            ->add('updatedAt')
+            // ->add('createdAt') 
+            // ->add('updatedAt')
         ;
     }
 
