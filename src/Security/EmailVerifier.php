@@ -2,6 +2,8 @@
 
 namespace App\Security;
 
+use App\Entity\Student;
+use App\Entity\Teacher;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;

@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\SheetRepository;
+use Cocur\Slugify\Slugify;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SheetRepository::class)]
@@ -27,6 +28,22 @@ class Sheet
 
     #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt = null;
+
+    #[ORM\PreUpdate]
+    public function preUpdate()
+    {
+        $this->updatedAt = new \DateTime();
+        $slugify = new Slugify();
+        $this->slug = $slugify->slugify($this->title);
+    }
+
+    #[ORM\PrePersist]
+    public function prePersist()
+    {
+        $this->createdAt = new \DateTime();
+        $slugify = new Slugify();
+        $this->slug = $slugify->slugify($this->title);
+    }
 
     public function getId(): ?int
     {
@@ -89,6 +106,23 @@ class Sheet
     public function setUpdatedAt(\DateTimeImmutable $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        if (!$this->slug) {
+            $this->setSlug($this->title);
+        }
+
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $slugify = new Slugify();
+        $this->slug = $slugify->slugify($slug);
 
         return $this;
     }

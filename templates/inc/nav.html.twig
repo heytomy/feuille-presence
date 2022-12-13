@@ -1,52 +1,63 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
 	<div class="container-fluid">
-		<a class="navbar-brand" href="#"><img src="img\ccicampus.png" alt="logo-cci" style="height: auto; width: 50px; margin-right: auto;" ></a>
+		<a class="navbar-brand" href="{{ path('app_index')}}"><img src="img\ccicampus.png" alt="logo-cci" style="height: auto; width: 50px; margin-right: auto;"></a>
 		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav mx-auto mb-2 mb-lg-0">
 				<li class="nav-item">
-					<a class="nav-link active" aria-current="page" href="#">Accueil</a>
+					<a class="nav-link active" aria-current="page" href="{{ path('app_index')}}">Accueil</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="#">Feuille de présence</a>
+					<a class="nav-link" href="{{ path('app_feuillepresence')}}">Feuille de présence</a>
 				</li>
-                <li class="nav-item">
-					<a class="nav-link" href="#">Statistiques</a>
+				<li class="nav-item">
+					<a class="nav-link" href="{{ path('app_stats')}}">Statistiques</a>
 				</li>
 			</ul>
 			<form class="d-flex" style="margin-right: auto;">
 				<input class="form-control me-3" type="search" placeholder="Rechercher" aria-label="Rechercher">
 				<button class="btn btn-success" type="submit" style="margin-left: 2%;">Search</button>
 			</form>
-
 			<div class="dropdown">
 				<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 					Se connecter
 				</button>
 				<div class="dropdown-menu dropdown-menu-right">
-					<form class="px-4 py-3">
-						<div class="mb-3">
-							<label for="exampleDropdownFormEmail1" class="form-label">Adresse E-mail</label>
-							<input type="email" class="form-control" id="exampleDropdownFormEmail1" placeholder="email@ccicampus.fr">
-						</div>
-						<div class="mb-3">
-							<label for="exampleDropdownFormPassword1" class="form-label">Mot de passe</label>
-							<input type="password" class="form-control" id="exampleDropdownFormPassword1" placeholder="Password">
-						</div>
-						<div class="mb-3">
-							<div class="form-check">
-								<input type="checkbox" class="form-check-input" id="dropdownCheck">
-								<label class="form-check-label" for="dropdownCheck">
-									Se souvenir de moi
-								</label>
+				{% block body %}
+						<form method="post" class="px-4 py-3">
+							{% if app.user %}
+								<div class="mb-3">
+									You are logged in as
+									{{ app.user.userIdentifier }},
+									<a href="{{ path('app_logout') }}">Logout</a>
+								</div>
+							{% endif %}
+							<div class="mb-3">
+								<label for="inputPassword" class="form-label">Adresse E-mail</label>
+								<input type="email" value="" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus placeholder="email@ccicampus.fr">
 							</div>
-						</div>
-						<button type="submit" class="btn btn-primary">Se connecter</button>
-					</form>
+							<div class="mb-3">
+								<label for="inputPassword" class="form-label">Mot de passe</label>
+								<input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required placeholder="Password">
+								<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+							</div>
+							<div class="mb-3">
+								<div class="form-check">
+									<input type="checkbox" class="form-check-input" id="dropdownCheck">
+									<label class="form-check-label" for="dropdownCheck" name="_remember_me">
+										Se souvenir de moi
+									</label>
+								</div>
+							</div>
+							<button type="submit" class="btn btn-primary">Se connecter</button>
+						</form>
+					{% endblock %}
+
+
 					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" href="#">Pas encore inscrit ? Inscrit toi</a>
+					<a class="dropdown-item" href="{{path('app_register')}}">Pas encore inscrit ? Inscrit toi</a>
 					<a class="dropdown-item" href="#">Mot de passe oublié ?</a>
 				</div>
 			</div>
